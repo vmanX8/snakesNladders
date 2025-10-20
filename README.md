@@ -70,21 +70,11 @@ Accessibility: Keyboard-friendly buttons, semantic roles, and aria labels.
 
 ---
 
-### 🧪 Customization
-Feature	Where to change
-Board size (rows × cols)	App.tsx → ROWS, COLS constants
-Snakes/ladders count	generateSnakesAndLadders(count, maxCell)
-Exact-finish rule	EXACT_FINISH in App.tsx
-Arrow visibility / opacity	Toggle in UI or default props in GameBoard.tsx
-Confetti duration / density	Props in ConfettiBurst.tsx
-
----
-
 ### 🧑‍💻 Author
 
 Vangelis Manouhos
-Frontend Engineer – React | TypeScript
-🔗 https://my-portfolio-ten-beta-w8rnleem6r.vercel.app/
+Frontend Engineer – React
+🔗 https://my-portfolio-l4ej.vercel.app/
 
 ---
 
