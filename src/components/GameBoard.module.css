@@ -1,0 +1,96 @@
+:root {
+  --cell-size: 56px;
+  --cell-gap: 2px;
+
+  --bg-default: #111827;
+  --bg-alt: #0f172a;
+  --num: #9ca3af;
+
+  --p1: var(--p1);
+  --p2: var(--p2);
+  --ladder: var(--ladder);
+  --snake: var(--snake);
+
+  --text-on-dark: #ffffff;
+  --border: rgba(255,255,255,0.06);
+
+  --arrow-opacity: 0.35;
+}
+
+.wrapper {
+  position: relative;
+  width: max-content;
+  user-select: none;
+  margin: 0 auto; /* center when used standalone */
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: var(--cell-gap);
+  background: transparent;
+}
+
+.row {}
+
+.cell {
+  position: relative;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid var(--border);
+  background: var(--bg-default);
+  border-radius: 10px;
+  font-weight: 600;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.cellAlt { background: var(--bg-alt); }
+
+.inner {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.emoji { font-size: 1.25rem; line-height: 1; }
+
+.number {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 0.75rem;
+  color: var(--num);
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.cellP1 { background: color-mix(in oklab, var(--p1) 80%, black); color: var(--text-on-dark); }
+.cellP2 { background: color-mix(in oklab, var(--p2) 80%, black); color: var(--text-on-dark); }
+.cellBoth { background: #f59e0b; color: #111827; }
+
+.cellLadder { box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--ladder) 70%, white); }
+.cellSnake  { box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--snake) 70%, white); }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arrowLadder {
+  stroke: var(--ladder);
+  fill: var(--ladder);
+  stroke-width: 3;
+  opacity: var(--arrow-opacity);
+}
+
+.arrowSnake {
+  stroke: var(--snake);
+  fill: var(--snake);
+  stroke-width: 3;
+  opacity: var(--arrow-opacity);
+}

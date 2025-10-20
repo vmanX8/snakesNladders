@@ -1,80 +1,144 @@
-import { useState } from 'react';
-import Confetti from 'react-confetti';
-import { Container, Table, Image, Button } from "react-bootstrap";
-import GameBoard from './components/GameBoard';
-import GameInfo from './components/GameInfo';
-import GameModal from './components/GameModal';
-import { rollDice, diceImages } from './utils/dice';
-import { generateSnakesAndLadders, getNewPosition, Snakes, Ladders } from './utils/sn&lad';
-import "bootstrap/dist/css/bootstrap.min.css";
-import './App.css';
+import React, { useCallback, useMemo, useState } from "react";
+import GameBoard from "./components/GameBoard";
+import GameInfo from "./components/GameInfo";
+import GameModal from "./components/GameModal";
+import DiceRoller from "./components/DiceRoller";
+import { getDiceFace, DicePips } from "./utils/dice";
+import { generateSnakesAndLadders, getNewPosition, Snakes, Ladders } from "./utils/SnNLadRules";
 
-function App() {
-  const [diceValue, setDiceValue] = useState(1);
-  const [position1, setPosition1] = useState(1);
-  const [position2, setPosition2] = useState(1);
-  const [currentPlayer, setCurrentPlayer] = useState(1);
-  const [winner, setWinner] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [{ snakes, ladders }, setBoard] = useState<{ snakes: Snakes; ladders: Ladders }>(() => generateSnakesAndLadders());
+import "./App.css";
 
-  const [confettiActive, setConfettiActive] = useState(false);
+/** Config */
+const ROWS = 6;
+const COLS = 5;
+const EXACT_FINISH = true;
 
-  const handleRoll = () => {
-    setDiceValue(rollDice());
-  };
+export default function App() {
+  const maxCell = ROWS * COLS;
 
-  const handleMove = () => {
-    const current = currentPlayer === 1 ? position1 : position2;
-    const setPosition = currentPlayer === 1 ? setPosition1 : setPosition2;
+  const [{ snakes, ladders }, setLayout] = useState<{ snakes: Snakes; ladders: Ladders }>(() =>
+    generateSnakesAndLadders(3, maxCell)
+  );
 
-    let newPos = Math.min(current + diceValue, 30);
-    newPos = getNewPosition(newPos, snakes, ladders);
+  const [p1, setP1] = useState(1);
+  const [p2, setP2] = useState(1);
+  const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
+  const [lastRoll, setLastRoll] = useState<DicePips | null>(null);
 
-    setPosition(newPos);
+  const [winner, setWinner] = useState<string | null>(null);
 
-    if (newPos === 30) {
-      setWinner(`Player ${currentPlayer}`);
-      setShowModal(true);
-      setConfettiActive(true);
-    } else {
-      setCurrentPlayer(prev => (prev === 1 ? 2 : 1));
-    }
-  };
+  /** Arrows controls */
+  const [showArrows, setShowArrows] = useState(true);
+  const [arrowOpacity, setArrowOpacity] = useState(0.35);
 
-  const resetGame = () => {
-    setPosition1(1);
-    setPosition2(1);
+  const currentPlayerLabel = currentPlayer === 1 ? "Player 1" : "Player 2";
+
+  const resetGame = useCallback(() => {
+    setP1(1); setP2(1);
     setCurrentPlayer(1);
-    setShowModal(false);
-    setBoard(generateSnakesAndLadders()); // 🎯 regenerate positions
-    setConfettiActive(false);
-  };
+    setLastRoll(null);
+    setWinner(null);
+  }, []);
+
+  const newLayout = useCallback(() => {
+    setLayout(generateSnakesAndLadders(3, maxCell));
+    resetGame();
+  }, [maxCell, resetGame]);
+
+  const applyRoll = useCallback((value: DicePips) => {
+    setLastRoll(value);
+
+    const moveOne = (pos: number) => {
+      const tentative = pos + value;
+      if (EXACT_FINISH && tentative > maxCell) return pos;
+      const landed = Math.min(tentative, maxCell);
+      return getNewPosition(landed, snakes, ladders);
+    };
+
+    if (currentPlayer === 1) {
+      setP1(prev => {
+        const next = moveOne(prev);
+        if (next === maxCell) { setWinner("Player 1"); return next; }
+        setCurrentPlayer(2);
+        return next;
+      });
+    } else {
+      setP2(prev => {
+        const next = moveOne(prev);
+        if (next === maxCell) { setWinner("Player 2"); return next; }
+        setCurrentPlayer(1);
+        return next;
+      });
+    }
+  }, [currentPlayer, ladders, snakes, maxCell]);
 
   return (
-    <Container className="text-center mt-5 p-4 rounded shadow bg-light">
-      {confettiActive && <Confetti />}
-      <h1 className="mb-4">🎮 Turn: <span className={currentPlayer === 1 ? "text-primary" : "text-info"}>
-        Player {currentPlayer}</span></h1>
+    <div className="app">
+      <header className="app__header">
+        <h1>🐍🪜 Snakes & Ladders</h1>
+        <div className="app__actions">
+          <button className="btn btn--ghost" onClick={newLayout} title="New random board">🧩 New Layout</button>
+          <button className="btn" onClick={resetGame} title="Reset positions">🔄 Reset Game</button>
+        </div>
+      </header>
 
-      <Table bordered striped className="bg-white shadow-sm">
-        <tbody>
-          <GameBoard position1={position1} position2={position2} snakes={snakes} ladders={ladders} />
-        </tbody>
-      </Table>
+      <main className="app__main">
+        <section aria-label="Board" className="panel panel--board">
+          <GameBoard
+            position1={p1}
+            position2={p2}
+            ladders={ladders}
+            snakes={snakes}
+            rows={ROWS}
+            cols={COLS}
+            cellSizePx={60}
+            cellGapPx={4}
+            showArrows={showArrows}
+            arrowOpacity={arrowOpacity}
+            strictValidation={false}
+          />
+        </section>
 
-      <h2 className="text-success mb-3">🎲 Dice: {diceValue}</h2>
-      <Image src={diceImages[diceValue - 1]} className="myimg mb-3 rounded" onClick={handleRoll} />
+        <aside className="panel panel--side" aria-label="Game controls">
+          <GameInfo dice={lastRoll} position1={p1} position2={p2} currentPlayer={currentPlayer} />
 
-      <div className="mb-3">
-        <Button variant="primary" onClick={handleRoll} className="mx-2">🎲 Roll</Button>
-        <Button variant="success" onClick={handleMove} className="mx-2">➡️ Move</Button>
-      </div>
+          <div className="roller">
+            <DiceRoller onResult={applyRoll} durationMs={650} fps={28} initial={1} />
+            <div className="roller__hint" aria-live="polite">
+              {lastRoll ? `Last roll: ${getDiceFace(lastRoll)} — ${currentPlayerLabel}'s turn` : `${currentPlayerLabel}, roll to start!`}
+            </div>
+          </div>
 
-      <GameInfo dice={diceValue} position1={position1} position2={position2} currentPlayer={currentPlayer} />
-      <GameModal show={showModal} winner={winner} onReset={resetGame} />
-    </Container>
+          <div className="controls">
+            <label>
+              <input type="checkbox" checked={showArrows} onChange={(e) => setShowArrows(e.target.checked)} />
+              Show arrows
+            </label>
+            <label>
+              Opacity
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.05}
+                value={arrowOpacity}
+                onChange={(e) => setArrowOpacity(parseFloat(e.target.value))}
+                style={{ width: 120 }}
+              />
+              <span style={{ width: 36, textAlign: "right" }}>{arrowOpacity.toFixed(2)}</span>
+            </label>
+          </div>
+
+          <div className="legend">
+            <div><span className="swatch swatch--p1" /> Player 1</div>
+            <div><span className="swatch swatch--p2" /> Player 2</div>
+            <div><span className="swatch swatch--ladder" /> Ladder</div>
+            <div><span className="swatch swatch--snake" /> Snake</div>
+          </div>
+        </aside>
+      </main>
+
+      <GameModal show={!!winner} winner={winner} onReset={resetGame} />
+    </div>
   );
 }
-
-export default App;

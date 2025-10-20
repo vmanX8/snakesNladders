@@ -1,33 +1,137 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+:root {
+  --panel: var(--surface);
+  --panel-2: var(--surface-2);
+  --text: var(--text);
+  --muted: var(--muted);
+  --primary: var(--primary);
+
+  --p1: var(--p1);
+  --p2: var(--p2);
+  --ladder: var(--ladder);
+  --snake: var(--snake);
+}
+
+* { box-sizing: border-box; }
+
+.app {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg) 60%, var(--surface-2) 100%);
+}
+
+.app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(17, 24, 39, 0.5);
+  backdrop-filter: blur(6px);
+}
+
+.app__header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.app__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s, opacity 0.2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: var(--text);
+}
+.btn--ghost:hover { opacity: 0.9; }
+
+.app__main {
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 360px);
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.panel--board {
+  display: grid;
+  place-items: center; /* centers the board */
+}
+
+.panel--side {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+}
+
+.roller {
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px dashed rgba(255,255,255,0.08);
+  border-radius: 12px;
+}
+.roller__hint {
+  color: var(--muted);
+  font-size: 0.9rem;
   text-align: center;
 }
 
-.myimg{
-  width:90px;
-  height:90px;
+.legend {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.legend .swatch {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 3px;
+  margin-right: 6px;
+}
+.swatch--p1 { background: var(--p1); }
+.swatch--p2 { background: var(--p2); }
+.swatch--ladder { background: var(--ladder); }
+.swatch--snake  { background: var(--snake); }
+
+.controls {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.myimg:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-  transform: scale(0.9);
-  transition: 0.3s;
-}
-
-button:hover {
-  transform: scale(1.05);
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.modal-body h3 {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.modal-body p {
-  font-size: 18px;
-  color: #555;
+@media (max-width: 900px) {
+  .app__main { grid-template-columns: 1fr; }
+  .panel--board { order: 1; }
+  .panel--side { order: 2; }
 }

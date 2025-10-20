@@ -1,0 +1,31 @@
+.wrapper {
+  width: 300px;
+  margin: 0.25rem auto 0;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #ffffff10;
+  border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+  user-select: none;
+}
+
+.title {
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.section {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.section strong { font-weight: 700; }
+
+.dice { color: #86efac; }
+.player1 { color: #93c5fd; }
+.player2 { color: #67e8f9; }
+.turn { color: #cbd5e1; }

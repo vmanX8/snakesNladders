@@ -1,0 +1,81 @@
+:root {
+  --green: #16a34a;
+  --yellow: #facc15;
+  --yellow-hover: #fbbf24;
+  --text-dark: #111827;
+  --overlay-bg: rgba(0, 0, 0, 0.45);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease-in forwards;
+}
+
+.dialog {
+  position: relative;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  overflow: hidden;
+  animation: popIn 0.25s ease-out forwards;
+}
+
+.header {
+  background: var(--green);
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 3;
+}
+
+.body {
+  padding: 1rem;
+  font-size: 1rem;
+  color: #1f2937;
+  position: relative;
+  z-index: 3;
+}
+
+.footer {
+  padding: 0.75rem 1rem 1rem;
+  position: relative;
+  z-index: 3;
+}
+
+.button {
+  background: var(--yellow);
+  color: var(--text-dark);
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.button:hover { background: var(--yellow-hover); transform: translateY(-1px); }
+.button:active { transform: translateY(0); }
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
