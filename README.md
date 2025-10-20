@@ -3,7 +3,7 @@
 An interactive, modern **Snakes & Ladders** web app built with **React**, **TypeScript**, **Vite**, and **CSS Modules**.  
 Features animated dice, player turns, confetti celebration, and toggleable arrows showing snake/ladder paths.
 
-Live demo → [your-vercel-url](https://your-vercel-url.vercel.app/)
+Live demo → [your-vercel-url](https://snakes-n-ladders-rose.vercel.app/)
 
 ---
 
