@@ -12,9 +12,9 @@
     "Segoe UI Emoji", "Segoe UI Symbol";
   --leading: 1.5;
 
-  /* Color tokens (dark default) */
-  --bg: #0b1220;
-  --surface: #0f172a;
+  /* Color tokens */
+  --bg: #124239;
+  --surface: #2e364a7f;
   --surface-2: #111827;
   --text: #e5e7eb;
   --muted: #94a3b8;

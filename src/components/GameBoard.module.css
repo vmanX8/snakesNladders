@@ -2,8 +2,10 @@
   --cell-size: 56px;
   --cell-gap: 2px;
 
-  --bg-default: #111827;
-  --bg-alt: #0f172a;
+  --bg-default: #404858;
+  --bg-alt: #1f2530;
+  --bg-fin: #0bff6566;
+  --bg-start: #ffd93050;
   --num: #9ca3af;
 
   --p1: var(--p1);
@@ -30,7 +32,7 @@
   background: transparent;
 }
 
-.row {}
+/* .row {} */
 
 .cell {
   position: relative;
@@ -46,7 +48,23 @@
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
 }
 
+/* --- Special tiles --- */
+.cellStart {
+  background: var(--bg-start) !important; /* always this tone */
+  color: #e5e7eb;
+}
+
+.cellFinish {
+  background: var(--bg-fin) !important; /* ladder green */
+  color: #0f172a;
+}
+/* Darker alternating tile for sequence positions */
 .cellAlt { background: var(--bg-alt); }
+
+/* Hide the corner number for start/finish tiles */
+.numberHidden {
+  display: none;
+}
 
 .inner {
   display: grid;
@@ -94,3 +112,11 @@
   stroke-width: 3;
   opacity: var(--arrow-opacity);
 }
+
+/* ---- Facing helpers ---- */
+.face {
+  display: inline-block;
+  transform-origin: center;
+}
+.faceRight { transform: scaleX(-1); }
+.faceLeft  { transform: none; }
